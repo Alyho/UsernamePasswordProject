@@ -1,4 +1,4 @@
-﻿using LocalDatabaseTutorial.Models;
+using UsernamePasswordProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,7 +31,7 @@ namespace UsernamePasswordProject.ViewModels
 
             _userListView = new ObservableCollection<Account>();
 
-            SaveCommand = new Command(() =>
+            SaveCommand = new Command(async () =>
             {
 
                 var _user = new Account
@@ -43,11 +43,22 @@ namespace UsernamePasswordProject.ViewModels
 
                 //call the save to database
 
+                await App.Database.SaveAccountAsync;
+                _userListView = await App.Database.GetAccountAsync();
+
                 //if the save returns an Account, then user already exists
+                if (_userListView)
+                {
+                    _userCreated = false;
+                };
 
                 //if the save returns null, then the user doesn't exist
 
-                _userCreated = false; //what the result of the save to database returns
+                if (_userListView == null)
+                {
+                    _userCreated = true;
+                }
+
                 var ar = new PropertyChangedEventArgs(nameof(UserCreated));
                 PropertyChanged?.Invoke(this, ar);
 
