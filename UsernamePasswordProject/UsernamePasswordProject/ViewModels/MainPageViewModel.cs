@@ -1,10 +1,10 @@
-using UsernamePasswordProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using Xamarin.Forms;
+using UsernamePasswordProject.Models;
 
 namespace UsernamePasswordProject.ViewModels
 {
@@ -44,10 +44,10 @@ namespace UsernamePasswordProject.ViewModels
                 //call the save to database
 
                 await App.Database.SaveAccountAsync;
-                _userListView = await App.Database.GetAccountAsync();
+                _userListView = await App.Database.GetAccountAsync(_user.Username);
 
                 //if the save returns an Account, then user already exists
-                if (_userListView)
+                if (_userListView != null)
                 {
                     _userCreated = false;
                 };

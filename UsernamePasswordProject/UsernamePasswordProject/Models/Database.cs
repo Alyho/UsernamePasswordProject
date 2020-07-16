@@ -14,6 +14,16 @@ namespace UsernamePasswordProject.Models
             _database.CreateTableAsync<Account>().Wait();
         }
 
+        public Task<Account> GetAccountAsync(string userName)
+        {
+            // var existingItem = _database.GetAsync<Account>(userName); // ? not completely sure if this is how you do it
+            // return existingItem;
+
+            return _database.Table<Account>()
+                            .Where(i => i.Username == userName)
+                            .FirstOrDefaultAsync();
+        }
+
         public Task<List<Account>> GetAccountsAsync()
         {
             return _database.Table<Account>().ToListAsync();
