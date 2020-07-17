@@ -9,10 +9,10 @@ namespace UsernamePasswordProject
 {
     public partial class App : Application
     {
+        
+        static IDatabase database;
 
-        static Database database;
-
-        public static Database Database
+        public static IDatabase Database
         {
             get
             {
@@ -23,6 +23,7 @@ namespace UsernamePasswordProject
                 return database;
             }
         }
+        
 
         public App()
         {

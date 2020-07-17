@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Xamarin.Forms;
 using UsernamePasswordProject.Models;
@@ -28,50 +30,53 @@ namespace UsernamePasswordProject.ViewModels
 
         public MainPageViewModel()
         {
-
             _userListView = new ObservableCollection<Account>();
+            //get existing users from database to populate the collection
+            PopulateUsers();
 
             SaveCommand = new Command(async () =>
             {
-
                 var _user = new Account
                 {
                     Username = Username_,
                     Password = Password_
-
                 };
 
-                //call the save to database
-
-                await App.Database.SaveAccountAsync;
-                _userListView = await App.Database.GetAccountAsync(_user.Username);
-
-                //if the save returns an Account, then user already exists
-                if (_userListView != null)
+                //call the database to find any users
+                var found = await App.Database.GetAccountAsync(_user.Username);
+                if (found != null) 
                 {
+                    //user already exists
                     _userCreated = false;
-                };
-
-                //if the save returns null, then the user doesn't exist
-
-                if (_userListView == null)
+                }
+                else
                 {
+                    //save the new user
+                    await App.Database.SaveAccountAsync(_user);
+                    _userListView.Add(_user);
+
                     _userCreated = true;
                 }
 
+                //Raise the Property Changed Event to notify the MainPage
                 var ar = new PropertyChangedEventArgs(nameof(UserCreated));
                 PropertyChanged?.Invoke(this, ar);
 
-                if (_userCreated)
-                {
-                    _userListView.Add(_user);
-                    Username = string.Empty;
-                    Password = string.Empty;
-                }
-                
+                //clear the textboxes
+                Username = string.Empty;
+                Password = string.Empty;
                 
             });
 
+        }
+
+        public async void PopulateUsers()
+        {
+            var users = await App.Database.GetAccountsAsync();
+            foreach (var user in users)
+            {
+                _userListView.Add(user);
+            }
         }
 
         public ObservableCollection<Account> userListView
