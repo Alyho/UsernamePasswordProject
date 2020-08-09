@@ -8,6 +8,6 @@ namespace UsernamePasswordProject.Models
     {
         Task<Account> GetAccountAsync(string userName);
         Task<List<Account>> GetAccountsAsync();
-        Task<int> SaveAccountAsync(Account account);
+        Task SaveAccountAsync(Account account);
     }
 }

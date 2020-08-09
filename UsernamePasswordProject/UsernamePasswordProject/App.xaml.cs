@@ -15,10 +15,11 @@ namespace UsernamePasswordProject
         public static IDatabase Database
         {
             get
-            {
+            { 
                 if (database == null)
                 {
-                    database = new Database(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "accounts.db3"));
+                    //database = new LocalDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "accounts.db3"));
+                    database = new FirebaseDatabase("https://usernamepasswordproject.firebaseio.com/");
                 }
                 return database;
             }

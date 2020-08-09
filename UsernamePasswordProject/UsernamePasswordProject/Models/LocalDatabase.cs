@@ -4,11 +4,11 @@ using SQLite;
 
 namespace UsernamePasswordProject.Models
 {
-    public class Database : IDatabase
+    public class LocalDatabase : IDatabase
     {
         readonly SQLiteAsyncConnection _database;
 
-        public Database(string dbPath)
+        public LocalDatabase(string dbPath)
         {
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<Account>().Wait();
@@ -29,7 +29,7 @@ namespace UsernamePasswordProject.Models
             return _database.Table<Account>().ToListAsync();
         }
 
-        public Task<int> SaveAccountAsync(Account account)
+        public Task SaveAccountAsync(Account account)
         {
             return _database.InsertAsync(account);
         }
