@@ -39,9 +39,14 @@ namespace UsernamePasswordProject.Models
                 }).ToList();
         }
 
-        public Task SaveAccountAsync(Account account)
+        public async Task SaveAccountAsync(Account account)
         {
-            return firebase.Child(ChildName).PostAsync(account);
+            await firebase.Child(ChildName).PostAsync(account);
+        }
+
+        public bool IsAccountValid(Account account)
+        {
+            throw new NotImplementedException();
         }
     }
 }

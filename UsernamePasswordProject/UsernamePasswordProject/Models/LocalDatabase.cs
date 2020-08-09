@@ -33,5 +33,10 @@ namespace UsernamePasswordProject.Models
         {
             return _database.InsertAsync(account);
         }
+
+        bool IDatabase.IsAccountValid(Account account)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
